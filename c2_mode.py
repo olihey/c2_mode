@@ -1,3 +1,5 @@
+# python3.5 c2_mode.py Modeline "3440x1440_60.00" 157.75 3440 3488 3520 3600 1440 1443 1453 1461 +HSync -Vsync
+
 import sys
 
 
@@ -27,6 +29,7 @@ if __name__ == "__main__":
     print(mode_line)
     width = int(mode_line[3])
     height = int(mode_line[7])
+    height_2x = 2 * height
     hz_float = float(mode_line[1].split("_")[1])
 
     gcd = calculate_gcd(width, height)
@@ -59,7 +62,7 @@ if __name__ == "__main__":
 
     v_freq = int(hz_float * 1000)
     h_freq = int(hz_float * (v_total - 1))
-    hz = int(round(hz_float))    
+    hz = int(round(hz_float))
 
     # 1
     print("\n\n\n1) drivers/amlogic/clk/gxbb_hdmi_clk.c: (around line 125)\n")
@@ -85,11 +88,11 @@ if __name__ == "__main__":
         break;""".format(**locals()))
 
     # 4
-    print("\n\n\n4) drivers/amlogic/clk/gxbb_hdmi_clk.c: (around line 760)\n")
+    print("\n\n\n4) drivers/amlogic/clk/gxbb_hdmi_clk.c: (around line 790)\n")
     print("        CTS_XXX_TBL({pixel_clock_1000}, {pixel_clock_1000}, 1, 1),".format(**locals()))
 
     # 5
-    print("\n\n\n5) drivers/amlogic/clk/gxbb_hdmi_clk.c: (around line 790)\n")
+    print("\n\n\n5) drivers/amlogic/clk/gxbb_hdmi_clk.c: (around line 830)\n")
     print("        CTS_XXX_TBL({pixel_clock_1000}, {pixel_clock_1000}, 1, 1),".format(**locals()))
 
     # 6
@@ -149,20 +152,20 @@ if __name__ == "__main__":
     }},
 }};""".format(**locals()))
 
-    # 9b
-    print("\n\n\n9b) drivers/amlogic/hdmi/hdmi_common/hdmi_parameters.c: (around line 1193)\n")
+    # 10
+    print("\n\n\n10) drivers/amlogic/hdmi/hdmi_common/hdmi_parameters.c: (around line 1193)\n")
     print("""        &fmt_para_vesa_{width}x{height}p{hz}_{aspect_ratio_num}x{aspect_ratio_den},""".format(**locals()))
 
-    # 10
-    print("\n\n\n10) drivers/amlogic/hdmi/hdmi_tx_20/hdmi_tx_edid.c: (around line 1632)\n")
+    # 11
+    print("\n\n\n11) drivers/amlogic/hdmi/hdmi_tx_20/hdmi_tx_edid.c: (around line 1632)\n")
     print("""        {{"{width}x{height}p{hz}hz", HDMIV_{width}x{height}p{hz}hz}},""".format(**locals()))
 
-    # 11
-    print("\n\n\n11) drivers/amlogic/hdmi/hdmi_tx_20/hdmi_tx_main.c: (around line 986)\n")
+    # 12
+    print("\n\n\n12) drivers/amlogic/hdmi/hdmi_tx_20/hdmi_tx_main.c: (around line 986)\n")
     print("""        "{width}x{height}p{hz}hz",""".format(**locals()))
 
-    # 12
-    print("\n\n\n12) drivers/amlogic/hdmi/hdmi_tx_20/hdmi_tx_video.c: (around line 611)\n")
+    # 13
+    print("\n\n\n13) drivers/amlogic/hdmi/hdmi_tx_20/hdmi_tx_video.c: (around line 611)\n")
     print("""    {{
         .VIC		= HDMIV_{width}x{height}p{hz}hz,
         .color_prefer   = COLOR_SPACE_RGB444,
@@ -181,8 +184,8 @@ if __name__ == "__main__":
     P_ENCP_VIDEO_MAX_LNCNT = v_total - 1
     P_ENCP_VIDEO_HAVON_END = int(mode_line[5]) - 1
 
-    # 13
-    print("\n\n\n13) drivers/amlogic/hdmi/hdmi_tx_20/hw/enc_cfg_hw.c: (around line 985)\n")
+    # 14
+    print("\n\n\n14) drivers/amlogic/hdmi/hdmi_tx_20/hw/enc_cfg_hw.c: (around line 985)\n")
     print("""static const struct reg_s tvregs_{width}x{height}p{hz}hz[] = {{
     {{P_VENC_VDAC_SETTING, 0xff,}},
     {{P_ENCP_VIDEO_EN, 0,}},
@@ -209,16 +212,16 @@ if __name__ == "__main__":
     {{MREG_END_MARKER, 0}},
 }};""".format(**locals()))
 
-    # 14
-    print("\n\n\n14) drivers/amlogic/hdmi/hdmi_tx_20/hw/enc_cfg_hw.c: (around line 1032)\n")
+    # 15
+    print("\n\n\n15) drivers/amlogic/hdmi/hdmi_tx_20/hw/enc_cfg_hw.c: (around line 1032)\n")
     print("""        {{HDMIV_{width}x{height}p{hz}hz, tvregs_{width}x{height}p{hz}hz}},""".format(**locals()))
 
-    # 15
-    print("\n\n\n15) drivers/amlogic/hdmi/hdmi_tx_20/hw/hdmi_tx_hw.c: (around line 360)\n")
+    # 16
+    print("\n\n\n16) drivers/amlogic/hdmi/hdmi_tx_20/hw/hdmi_tx_hw.c: (around line 360)\n")
     print("""        {{HDMIV_{width}x{height}p{hz}hz, 24000, {pixel_clock_10000}, {pixel_clock_1000}, {pixel_clock_1000}, -1, {pixel_clock_1000}}},""".format(**locals()))
 
-    # 16
-    print("\n\n\n16) drivers/amlogic/hdmi/hdmi_tx_20/hw/hdmi_tx_hw.c: (around line 1570)\n")
+    # 17
+    print("\n\n\n17) drivers/amlogic/hdmi/hdmi_tx_20/hw/hdmi_tx_hw.c: (around line 1570)\n")
     print("""    case HDMIV_{width}x{height}p{hz}hz:
         INTERLACE_MODE      = 0;
         PIXEL_REPEAT_VENC   = 0;
@@ -236,14 +239,28 @@ if __name__ == "__main__":
         TOTAL_FRAMES        = 4;
         break;""".format(**locals()))
 
-    # 17
-    print("\n\n\n17) include/linux/amlogic/hdmi_tx/hdmi_common.h: (around line 187)\n")
+    # 18
+    print("\n\n\n18) include/linux/amlogic/hdmi_tx/hdmi_common.h: (around line 187)\n")
     print("""        HDMIV_{width}x{height}p{hz}hz,""".format(**locals()))
 
-    # 18
-    print("\n\n\n18) include/linux/amlogic/vout/vinfo.h: (around line 77)\n")
+    # 19
+    print("\n\n\n19) include/linux/amlogic/vout/vinfo.h: (around line 77)\n")
     print("""        VMODE_{width}x{height}p{hz}hz,""".format(**locals()))
 
-    # 19
-    print("\n\n\n19) include/linux/amlogic/vout/vinfo.h: (around line 145)\n")
+    # 20
+    print("\n\n\n20) include/linux/amlogic/vout/vinfo.h: (around line 145)\n")
     print("""        TVMODE_{width}x{height}p{hz}hz,""".format(**locals()))
+
+    # 21
+    print("\n\n\n21) drivers/amlogic/display/logo/logo.c: (around line 77)\n")
+    print("""        {{"{width}x{height}p{hz}hz", TVMODE_{width}x{height}p{hz}hz}},""".format(**locals()))
+
+    # 22
+    print("\n\n\n22) drivers/amlogic/display/osd/osd_fb.c: (around line 417)\n")
+    print("""    case TVMODE_{width}x{height}p{hz}hz:
+        fb_def_var[index].xres = {width};
+        fb_def_var[index].yres = {height};
+        fb_def_var[index].xres_virtual = {width};
+        fb_def_var[index].yres_virtual = {height_2x};
+        fb_def_var[index].bits_per_pixel = 32;
+        break;""".format(**locals()))
